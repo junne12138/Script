@@ -1,0 +1,25 @@
+# File: .github/workflows/repo-sync.yml
+name: sync-JD-scripts
+on:
+  schedule:
+    - cron: '1 0,15 * * *'
+  workflow_dispatch:
+  repository_dispatch:
+    types: sync-JD-scripts
+jobs:
+  repo-sync:
+    env:
+      PAT: ${{ secrets.WORKFLOW }} #此处PAT需要申请，教程详见：https://www.jianshu.com/p/bb82b3ad1d11
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: sync-JD-scripts
+        uses: repo-sync/github-sync@v2
+        with:
+          source_repo: "https://github.com/NobyDa/Script.git"
+          source_branch: "master"
+          destination_branch: "master"
+          github_token: ${{ secrets.WORKFLOW }}
